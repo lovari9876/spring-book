@@ -20,7 +20,7 @@ public class LogoutController implements Controller {
 
 		// 2. 세션 종료 후, 메인 화면으로 이동한다.
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("login.jsp");
+		mav.setViewName("redirect:login.jsp");
 		return mav;
 	}
 

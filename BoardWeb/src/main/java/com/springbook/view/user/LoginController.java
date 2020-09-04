@@ -30,9 +30,9 @@ public class LoginController implements org.springframework.web.servlet.mvc.Cont
 		// 3. 화면 네비게이션
 		ModelAndView mav = new ModelAndView();
 		if (user != null) {
-			mav.setViewName("getBoardList.do");
+			mav.setViewName("redirect:getBoardList.do"); // ViewResolver 설정을 무시하고 그냥 redirect!
 		} else {
-			mav.setViewName("login.jsp");
+			mav.setViewName("redirect:login.jsp");
 			// 이제 string으로 return하지 않고 viewResolver가 setSufix해주지도 않기에
 			// .jsp를 꼭 붙여줘야 한다.
 		}

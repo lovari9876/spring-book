@@ -27,4 +27,17 @@
 	<bean id="insertBoard" class="com.springbook.view.board.InsertBoardController" />
 	<bean id="updateBoard" class="com.springbook.view.board.UpdateBoardController" />
 	<bean id="deleteBoard" class="com.springbook.view.board.DeleteBoardController" />
+
+
+	<!-- ViewResolver 등록 -->
+	<bean id="viewResolver"	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/board/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	
+	
+	
+	
+		
 </beans>
