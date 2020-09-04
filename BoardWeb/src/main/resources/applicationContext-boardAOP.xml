@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<context:component-scan
+		base-package="com.springbook.biz"></context:component-scan>
+		
+		
+	<!-- for AOP -->
+	<bean id="log" class="com.springbook.biz.common.Log4jAdvice" />
+
+	<bean id="before" class="com.springbook.biz.common.BeforeAdvice" />
+	<bean id="afterReturning" class="com.springbook.biz.common.AfterReturningAdvice" />
+	<bean id="afterThrowing" class="com.springbook.biz.common.AfterThrowingAdvice" />
+	<bean id="after" class="com.springbook.biz.common.AfterAdvice" />
+	<bean id="around" class="com.springbook.biz.common.AroundAdvice" />
+
+	<aop:config>
+		<aop:pointcut id="allPointcut"
+			expression="execution(* com.springbook.biz..*Impl.*(..))" />
+		<aop:pointcut id="getPointcut"
+			expression="execution(* com.springbook.biz..*Impl.get*(..))" />
+
+		<aop:aspect ref="before">
+			<aop:before pointcut-ref="allPointcut" method="beforeLog" />
+		</aop:aspect>
+
+		<aop:aspect ref="afterReturning">
+			<aop:after-returning pointcut-ref="getPointcut"
+				method="afterLog" returning="returnObj" />
+			<!-- advice에 jp 외에 return객체가 인자로 들어가면, 조인포인트가 리턴한 객체에 대한 bind처리를 해줘야한다. -->
+		</aop:aspect>
+
+		<aop:aspect ref="afterThrowing">
+			<aop:after-throwing pointcut-ref="allPointcut"
+				method="exceptionLog" throwing="exceptObj" />
+		</aop:aspect>
+
+		<aop:aspect ref="after">
+			<aop:after pointcut-ref="allPointcut" method="finallyLog" />
+		</aop:aspect>
+
+		<aop:aspect ref="around">
+			<aop:around pointcut-ref="allPointcut" method="aroundLog" />
+		</aop:aspect>
+	</aop:config>
+
+
+	<!-- These beans for setter injection with no using annotation. 근데 annotation으로 
+		변경함~~~ -->
+	<!-- <bean id="userService" class="com.springbook.biz.user.impl.UserServiceImpl"> 
+		<property name="userDAO" ref="userDAO" /> </bean> <bean id="userDAO" class="com.springbook.biz.user.impl.UserDAO"></bean> -->
+
+</beans>

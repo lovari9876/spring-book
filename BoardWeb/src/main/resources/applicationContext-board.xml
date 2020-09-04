@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+	<context:component-scan
+		base-package="com.springbook.biz"></context:component-scan>
+
+
+	<!-- for AOP Annotation -->
+	<aop:aspectj-autoproxy />
+
+	<!-- DataSource 설정 -->
+	<context:property-placeholder location="classpath:config/database.properties" />
+	<!-- placeholder는 ${} 이거임 -->
+	<!-- The location of the properties file to resolve placeholders against, 
+		as a Spring resource location: a URL, a "classpath:" pseudo URL, or a relative 
+		file path. Multiple locations may be specified, separated by commas. If neither 
+		location nor properties-ref is specified, placeholders will be resolved against 
+		system properties. 
+		* 결론: classpath:하면 상대 주소 쓰면 된다. -->
+
+	<!-- property 파일 주소로 placeholder 만들어줬으므로 가져다가 쓴다. -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+
+		<property name="driverClassName"
+			value="${jdbc.driver}" />
+		<property name="url"
+			value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- Spring JDBC 설정 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!-- Transaction 설정 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" /> <!-- dataSource객체를 Setter Injection -->
+		<!-- public void setDataSource(@Nullable DataSource dataSource){} -->
+	</bean>
+
+	<!-- tx advice 설정 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- tx advice에 대한 aop config -->
+	<aop:config>
+		<aop:pointcut id="txPointcut" expression="execution(* com.springbook.biz..*Impl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	
+	
+	
+	
+
+
+	<!-- These beans for setter injection with no using annotation. 근데 annotation으로 변경함~~~ -->
+	<!-- 
+	<bean id="userService" class="com.springbook.biz.user.impl.UserServiceImpl"> 
+		<property name="userDAO" ref="userDAO" /> 
+	</bean> 
+	
+	<bean id="userDAO" class="com.springbook.biz.user.impl.UserDAO"></bean> -->
+
+</beans>
