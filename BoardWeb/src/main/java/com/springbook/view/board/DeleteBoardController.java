@@ -1,21 +1,20 @@
-package com.springbook.biz.board;
-
-import java.util.List;
+package com.springbook.view.board;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
+import com.springbook.biz.board.BoardVO;
 import com.springbook.biz.board.impl.BoardDAO;
-import com.springbook.view.controller.Controller;
 
 public class DeleteBoardController implements Controller {
 
 	@Override
-	public String handleRequest(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
 
 		System.out.println("글 삭제 처리");
-		
+
 		// 1. 사용자 입력 정보 추출
 		String seq = request.getParameter("seq"); // url뒤의 query String 받아오기
 
@@ -27,7 +26,10 @@ public class DeleteBoardController implements Controller {
 		boardDAO.deleteBoard(vo);
 
 		// 3. 화면 네비게이션
-		return "getBoardList.do";
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("getBoardList.do");
+
+		return mav;
 	}
 
 }
