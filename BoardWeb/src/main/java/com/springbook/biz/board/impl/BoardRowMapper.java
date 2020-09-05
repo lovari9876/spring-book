@@ -11,6 +11,7 @@ import com.springbook.biz.board.BoardVO;
 // 결국 테이블 하나당 하나의 RowMapper 클래스 필요.. 
 public class BoardRowMapper implements RowMapper<BoardVO> {
 
+	@Override
 	public BoardVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		BoardVO board = new BoardVO();

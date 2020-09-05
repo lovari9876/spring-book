@@ -2,8 +2,6 @@ package polymorphism;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("tv") // 이제 tv라는 id 요청 시 LgTV 호출!
@@ -23,18 +21,22 @@ public class LgTV implements TV {
 		System.out.println("===> LgTV 객체 생성");
 	}
 
+	@Override
 	public void powerOn() {
 		System.out.println("LgTV---전원 켠다.");
 	}
 
+	@Override
 	public void powerOff() {
 		System.out.println("LgTV---전원 끈다.");
 	}
 
+	@Override
 	public void volumeUp() {
 		speaker.volumeUp();
 	}
 
+	@Override
 	public void volumeDown() {
 		speaker.volumeDown();
 	}
