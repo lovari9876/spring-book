@@ -1,11 +1,7 @@
 package com.springbook.view.board;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.springbook.biz.board.BoardVO;
 import com.springbook.biz.board.impl.BoardDAO;
 
@@ -18,28 +14,15 @@ public class InsertBoardController {
 	// @Controller 어노테이션 통해 스프링컨테이너가 자동으로 객체 생성 및, Controller 객체임을 인식한다.
 
 	@RequestMapping("/insertBoard.do") // auto HandlerMapping
-	public void insertBoard(HttpServletRequest request/* , HttpServletResponse response */) {
+	public String insertBoard(BoardVO vo, BoardDAO boardDAO) {
 
 		System.out.println("글 등록 처리");
 
-		// 1. 사용자 입력 정보 추출
-		String title = request.getParameter("title");
-		String writer = request.getParameter("writer");
-		String content = request.getParameter("content");
-
-		// 2. DB 연동 처리
-		BoardVO vo = new BoardVO();
-		vo.setTitle(title);
-		vo.setWriter(writer);
-		vo.setContent(content);
-
-		BoardDAO boardDAO = new BoardDAO();
+//		BoardDAO boardDAO = new BoardDAO(); // argument로 넣으면 컨테이너가 자동 생성해준다.
+//		직접 객체를 생성할 필요가 없다.
 		boardDAO.insertBoard(vo);
-
-		// 3. 화면 네비게이션
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:getBoardList.do");
-
+	
+		return "redirect:getBoardList.do";
 	}
 
 }
