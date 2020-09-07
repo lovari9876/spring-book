@@ -1,7 +1,9 @@
 package com.springbook.view.user;
 
-import org.springframework.stereotype.Controller;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,23 +23,30 @@ import com.springbook.biz.user.impl.UserDAO;
 public class LoginController {
 
 	@RequestMapping(value = "login.do", method = RequestMethod.GET)
-	public String loginView(UserVO vo) {
-
+	public String loginView(@ModelAttribute("user") UserVO vo) {
+		// Command 객체 이름은 클래스 이름의 첫글자를 소문자로 변경하여 자동으로 설정된다.
+		// => 예) userVO
+		// 객체 이름으로 *.jsp에서 멤버변수를 getter로 호출할 수 있으므로
+		// 이름을 바꾸고 싶다면 @ModelAttribute 사용할것
+		// => 지금 설정되어있는 것은 user
+		
 		System.out.println("로그인 처리");
 
 		vo.setId("test");
-		vo.setPassword("1234");
-		// test로 진입해서 그냥 기본적으로 목록 볼 수 있도록...
+		vo.setPassword("1234"); // null인 객체를 줄 수는 없으니 db값 하나 넣어준다.
 
 		return "login.jsp";
 	}
 
 	@RequestMapping(value = "login.do", method = RequestMethod.POST)
-	public String login(UserVO vo, UserDAO userDAO) {
+	public String login(UserVO vo, UserDAO userDAO, HttpSession session) {
 
 		System.out.println("로그인 처리");
+		
+		UserVO user = userDAO.getUser(vo);
 
 		if (userDAO.getUser(vo) != null) {
+			session.setAttribute("userName", user.getName());
 			return "redirect:getBoardList.do";
 		} else {
 			return "redirect:login.jsp";

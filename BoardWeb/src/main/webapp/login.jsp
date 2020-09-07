@@ -62,11 +62,12 @@ th {
 			<table border="1" cellpadding="0" cellspacing="0">
 				<tr>
 					<th>아이디</th>
-					<td><input type="text" name="id" value="${userVO.id }"/></td>
+					<td><input type="text" name="id" value="${user.id }"/></td> <!-- 값이 있으면 입력되어 나온다. -->
+					<!-- Command 객체 이름은 클래스 이름의 첫글자를 소문자로 변경하여 자동으로 설정된다. -->
 				</tr>
 				<tr>
 					<th>비밀번호</th>
-					<td><input type="password" name="password" value="${userVO.password }"/></td>
+					<td><input type="password" name="password" value="${user.password }"/></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center">
