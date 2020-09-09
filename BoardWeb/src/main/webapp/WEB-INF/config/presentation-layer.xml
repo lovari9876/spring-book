@@ -16,11 +16,25 @@
 	
 	<!-- 예외처리: 1. Annotation 쓸 때 -->
 	<!-- 예외 처리 클래스에서 예외 처리 메서드 위에 @ExceptionHandler 설정하기 위해! -->
-	<mvc:annotation-driven></mvc:annotation-driven>
+	<!-- <mvc:annotation-driven></mvc:annotation-driven> -->
 	
-
+	<!-- 예외처리: 2. bean 등록할 때; 이름 틀리면 안된다. 정해져있음!-->
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings"> 
+			<props>
+				<prop key="java.lang.ArithemticException">
+					common/arithmeticError.jsp
+				</prop>
+				<prop key="java.lang.NullPointerException">
+					common/nullPointerError.jsp
+				</prop>
+			</props>
+		</property>
+		<property name="defaultErrorView" value="common/error.jsp" />
+	</bean>
 	
-	<!-- 파일 업로드 설정 -->
+	
+	<!-- 파일 업로드 설정; 이름 틀리면 안된다. 정해져있음! -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="100000" />
 	</bean>
