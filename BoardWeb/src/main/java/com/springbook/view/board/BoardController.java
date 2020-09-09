@@ -25,7 +25,7 @@ public class BoardController {
 	// return type ModelAndView를 계속 쓸 필요도 없어졌다!
 	// Cotroller 객체임을 상속을 통해 구현하는게 아니라 POJO 스타일로 구현하게 된 것;
 	// @Controller 어노테이션 통해 스프링컨테이너가 자동으로 객체 생성 및, Controller 객체임을 인식한다.
-	
+
 	@Autowired
 	private BoardService boardService;
 
@@ -86,6 +86,14 @@ public class BoardController {
 	public String getBoardList(BoardVO vo, BoardDAO boardDAO, Model model) {
 
 		System.out.println("글 목록 검색 처리");
+		System.out.println("키워드: " + vo.getSearchKeyword());
+
+		// Null check
+		if (vo.getSearchCondition() == null)
+			vo.setSearchCondition("TITLE");
+		if (vo.getSearchKeyword() == null)
+			vo.setSearchKeyword("");
+
 		model.addAttribute("boardList", boardService.getBoardList(vo)); // Model 정보 저장
 
 		return "getBoardList.jsp";

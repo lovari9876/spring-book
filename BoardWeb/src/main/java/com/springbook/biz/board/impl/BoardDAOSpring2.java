@@ -30,6 +30,15 @@ public class BoardDAOSpring2 {
 	private final String BOARD_DELETE = "delete from board where seq=?";
 	private final String BOARD_GET = "select * from board where seq=?";
 	private final String BOARD_LIST = "select * from board order by seq desc";
+	// 검색 위한 쿼리
+	// %는 0개 이상의 문자를 의미하는 와일드 카드=> ?가 ''일 때, '%%'처리되어 모든 결과 리턴
+	// 책처럼 '%'||?||'%'로 하면 orcle에서는 검색 결과 리턴. 그러나 mysql에서는 모든 row를 리턴한다.
+	// => oracle에서는 '%keyword%'나 '%'||'keyword'||'%' 가 같은 검색 결과를 리턴하지만,
+	// => mysql에서는 첫번째는 검색결과, 두번째는 전체row를 리턴하는 것이다.
+	// ==> mysql에서는 ||연산자가 정확히 합집합의 결과를 가져오므로, preparedStatement를 사용하기 위해서는
+	//		CONCAT('%', ?, '%')을 써야 한다. 그러면, 따옴표 문제와 or연산자 문제가 전부 해결된다.
+	private final String BOARD_LIST_T = "select * from board where title like CONCAT('%', ?, '%') order by seq desc";
+	private final String BOARD_LIST_C = "select * from board where content like CONCAT('%', ?, '%') order by seq desc";
 
 	// CRUD 기능의 메소드 구현 ========================================
 	// 글 등록 create
@@ -60,7 +69,14 @@ public class BoardDAOSpring2 {
 	// 글 목록 조회 read
 	public List<BoardVO> getBoardList(BoardVO vo) {
 		System.out.println("===> Spring JDBC로 getBoardList() 기능 처리");
-		return jdbcTemplate.query(BOARD_LIST, new BoardRowMapper());
+		Object[] args = { vo.getSearchKeyword() };
+		// 검색조건을 vo에서 가져와서 검색 조건에 따른 쿼리 설정
+		if (vo.getSearchCondition().equals("TITLE")) {
+			return jdbcTemplate.query(BOARD_LIST_T, args, new BoardRowMapper());
+		} else if (vo.getSearchCondition().equals("CONTENT")) {
+			return jdbcTemplate.query(BOARD_LIST_C, args, new BoardRowMapper());
+		}
+		return null;
 	}
 
 }

@@ -13,7 +13,7 @@ import com.springbook.biz.board.BoardVO;
 public class BoardServiceImpl implements BoardService {
 
 	@Autowired
-	private BoardDAO boardDAO;
+	private BoardDAOSpring2 boardDAO;
 //	private LogAdvice log;
 
 //	// log 객체 생성하는 생성자 => 공통 로직 분리안됨 
