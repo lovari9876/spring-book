@@ -29,7 +29,7 @@ public class LoginController {
 		// 객체 이름으로 *.jsp에서 멤버변수를 getter로 호출할 수 있으므로
 		// 이름을 바꾸고 싶다면 @ModelAttribute 사용할것
 		// => 지금 설정되어있는 것은 user
-		
+
 		System.out.println("로그인 처리");
 
 		vo.setId("test");
@@ -42,7 +42,11 @@ public class LoginController {
 	public String login(UserVO vo, UserDAO userDAO, HttpSession session) {
 
 		System.out.println("로그인 처리");
-		
+
+		// 아이디 입력 안하거나 null일때 강제로 예외 발생시켜서 예외 처리!
+		if (vo.getId() == null || vo.getId().equals("")) {
+			throw new IllegalArgumentException("아이디는 반드시 입력해야 합니다.");
+		}
 		UserVO user = userDAO.getUser(vo);
 
 		if (userDAO.getUser(vo) != null) {

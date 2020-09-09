@@ -13,6 +13,7 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
+	
 	<dependencies>
 		<!-- MySql database -->
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
@@ -38,6 +39,14 @@
 		    <version>2.7.0</version>
 		</dependency> <!-- 저자는 1 썼는데, 난 2 쓸래 -->
 	
+		<!-- FileUpload -->
+		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
 	
 		<!-- Spring -->
 		<dependency>

@@ -58,7 +58,7 @@ th {
 			<a href="logout.do">Log-out</a>
 		</h3>
 
-		<form action="insertBoard.do" method="post">
+		<form action="insertBoard.do" method="post" enctype="multipart/form-data">
 			<table border="1" cellpadding="0" cellspacing="0" >
 				<tr>
 					<th width="70">제목</th>
@@ -79,6 +79,12 @@ th {
 					</td>					
 				</tr>
 				<tr>
+					<th width="70">업로드</th>
+					<td align="left">
+						<input type="file" name="uploadFile" />
+					</td>					
+				</tr>				
+				<tr>
 					<td align="center" colspan="2">
 						<input type="submit" value="새 글 등록" />
 					</td>
@@ -88,6 +94,7 @@ th {
 		
 		<br>
 		<hr>
+		
 		
 		<a href="getBoardList.do">목록으로</a>
 		
